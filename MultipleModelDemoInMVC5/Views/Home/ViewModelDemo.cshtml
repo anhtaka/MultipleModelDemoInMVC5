@@ -1,0 +1,100 @@
+﻿@model MultipleModelDemo.ViewModel.ViewModelDemoVM
+<html>
+<head>
+    <title>Using ViewData</title>
+</head>
+<body style="background-color: #99FFCC">
+    <h3>Passing Multiple Models using<span class="specialText"> <i>ViewModel</i></span></h3>
+    <table>
+        <tr>
+            <td class="sltCourseText">
+                <h3>Select a Course </h3>
+            </td>
+            <td>
+                <select id="sltCourse" class="sltStyle">
+                    <option>Select Course</option>
+                    @*Iterating Course ViewModel *@
+                    @foreach (var item in Model.allCourses)
+                    {         
+                        <option>@item.CourseName
+                        </option>            
+                    }
+                </select>
+            </td>
+        </tr>
+    </table>
+
+    <div id="facultyDetailSection">
+        <h4>Faculties who teach selected course</h4>
+        <div id="facultyDetailTable"></div>
+    </div>
+
+    <div id="studentDetailSection">
+        <h4>Students who learn selected course</h4>
+        <div id="studentDetailTable"></div>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $("body").css("background-color", "#D3D3A9")
+            $("#facultyDetailSection").fadeOut(0);
+            $("#studentDetailSection").fadeOut(0);
+        });
+        
+        var selectedCourseName;
+
+        $("#sltCourse").change(function () {
+           
+            selectedCourseName = $("#sltCourse").val().trim();
+
+            if (selectedCourseName === "Select Course") {
+                $("#facultyDetailSection").fadeOut();
+                $("#studentDetailSection").fadeOut();
+            }
+            else {
+                getFacultyTable();
+                getStudentTable();
+                $("#facultyDetailSection").fadeIn();
+                $("#studentDetailSection").fadeIn();
+            }
+        });
+       
+        function getFacultyTable() {
+            $("#facultyDetailTable").empty();
+            $("#facultyDetailTable").append("<table id='tblfaculty'  class='tableStyle'><tr><th class='tableHeader' style='width:60px;'>Employee ID</th><th class='tableHeader'>Faculty Name</th></tr></table>");
+            
+            //Get all faculties with the help of viewmodel(Model.allFaculties), and convert data into json format.
+            var allFaculties = @Html.Raw(Json.Encode(Model.allFaculties));
+            
+            for (var i = 0; i < allFaculties.length; i++) {
+                var allotedCourses = allFaculties[i].AllotedCourses;
+                for (var j = 0; j < allotedCourses.length; j++) {
+                    if(allotedCourses[j].CourseName === selectedCourseName)
+                        $("#tblfaculty").append("<tr><td class='tableCell'>"  + allFaculties[i].FacultyId 
+                            + "</td><td class='tableCell'>"+allFaculties[i].FacultyName+"</td></tr>");
+                }
+            }
+        }
+
+        function getStudentTable() {
+            $("#studentDetailTable").empty();
+            $("#studentDetailTable").append("<table id='tblStudent' class='tableStyle'><tr><th class='tableHeader' style='width:60px;'>Roll No</th><th class='tableHeader'>Student Name</th></tr></table>");
+            
+            //Get all students with the help of viewmodel(Model.allStudents), and convert data into json format.
+            var allStudents = @Html.Raw(Json.Encode(Model.allStudents));
+           
+                for (var i = 0; i < allStudents.length; i++) {
+                    var studentCourses = allStudents[i].EnrolledCourses;
+                    for (var j = 0; j < studentCourses.length; j++) {
+                        if(studentCourses[j].CourseName === selectedCourseName)                      
+                            $("#tblStudent").append("<tr><td class='tableCell'>"  + allStudents[i].EnrollmentNo 
+                                + "</td><td  class='tableCell'>"+allStudents[i].StudentName+"</td></tr>");
+                    }
+                }           
+            }
+    </script>
+</body>
+</html>
+
+
+

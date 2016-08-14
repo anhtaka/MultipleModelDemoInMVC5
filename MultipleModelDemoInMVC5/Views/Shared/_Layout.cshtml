@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    @*Referenced  js and css files which comes with template*@
+    <script src="~/Scripts/jquery-1.10.2.js"></script>   
+    <link href="~/Content/Site.css" rel="stylesheet" />
+
+    @*Referenced appcss file having custom CSS*@
+    <link href="~/Content/appcss/appcss.css" rel="stylesheet" />
+</head>      
+<body>
+    @* Define the place for navigation links in left side of the page*@
+    <div class="navigationPanel">
+        <div style="margin: 40px 25px 2px 25px;">
+            <h3>Links to Demostrations</h3>
+            <a href="~/Home/ViewDataDemo">ViewData Demo</a>
+            <br />
+            <br />
+            <a href="~/Home/ViewBagDemo">ViewBag Demo</a>
+            <br />
+            <br />
+            <a href="~/Home/PartialViewDemo">PartialView Demo</a>
+            <br />
+            <br />
+            <a href="~/Home/TempDataDemo">TempData Demo</a>
+            <br />
+            <br />
+            <a href="~/Home/ViewModelDemo">ViewModel Demo</a>
+            <br />
+            <br />
+            <a href="~/Home/TupleDemo">Tuple Demo</a>
+        </div>
+    </div>
+    <div style="float: left; margin: 25px 2px 2px 80px;">
+        @RenderBody()
+    </div>
+</body>
+</html>

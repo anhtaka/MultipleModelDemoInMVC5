@@ -1,0 +1,92 @@
+﻿<html>
+<head>
+    <title>Using TempData</title>
+</head>
+<body style="background-color: #99FFCC">
+    <h3>Passing Multiple Models using <span class="specialText"> <i>TempData</i></span></h3>
+    <table id="courseSelector">
+        <tr>
+            <td class="sltCourseText">
+                <h3>Select a Course</h3>
+            </td>
+            <td>
+                <select id="sltCourse" class="sltStyle">
+                    <option>Select Course</option>
+                    @*Iterating Course model using TempData["Courses"] *@
+                    @foreach (var item in TempData["Courses"] as List<MultipleModelDemo.Models.Course>)
+                    {         
+                        <option>@item.CourseName
+                        </option>            
+                    }
+                </select>
+            </td>
+        </tr>
+    </table>
+
+    <div id="facultyDetailSection">
+        <h4>Faculties who teach selected course</h4>
+        <div id="facultyDetailTable"></div>
+    </div>
+
+    <div id="studentDetailSection">
+        <h4>Students who learn selected course</h4>
+        <div id="studentDetailTable"></div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#facultyDetailSection").fadeOut(0);
+            $("#studentDetailSection").fadeOut(0);
+        });
+
+        var selectedCourseName;
+
+        $("#sltCourse").change(function () {
+
+            selectedCourseName = $("#sltCourse").val().trim();
+
+            if (selectedCourseName === "Select Course") {
+                $("#facultyDetailSection").fadeOut();
+                $("#studentDetailSection").fadeOut();
+            }
+            else {
+                getFacultyTable();
+                getStudentTable();                
+                $("#facultyDetailSection").fadeIn();
+                $("#studentDetailSection").fadeIn();
+            }
+        });
+
+        function getFacultyTable() {
+            $.ajax({
+                // Get Faculty PartialView
+                url: "/Home/FacultiesToTempDataDemo",
+                type: 'Get',
+                data: { courseName: selectedCourseName },
+                success: function (data) {
+                    $("#facultyDetailTable").empty().append(data);
+                },
+                error: function () {
+                    alert("something seems wrong");
+                }
+            });
+        }
+        
+        function getStudentTable() {
+            $.ajax({
+                // Get Student PartialView
+                url: "/Home/StudentsToTempDataDemo",
+                type: 'Get',
+                data: { courseName: selectedCourseName },
+                success: function (data) {
+                    $("#studentDetailTable").empty().append(data);
+                },
+                error: function () {
+                    alert("something seems wrong");
+                }
+            });
+        }
+             
+    </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+﻿@model  IEnumerable<MultipleModelDemo.Models.Faculty>
+
+<table id="tblFacultyDetail" class="tableStyle">
+    <tr>
+        <th class="tableHeader" style="width:60px;">Employee ID</th>
+        <th class="tableHeader">Faculty Name</th>
+    </tr>
+@foreach (var item in Model)
+{
+     <tr>
+        <td class="tableCell">@item.FacultyId</td>
+        <td class="tableCell">@item.FacultyName</td>
+    </tr>
+}       
+</table>
+
